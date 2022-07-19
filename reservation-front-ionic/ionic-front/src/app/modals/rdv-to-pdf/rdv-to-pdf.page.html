@@ -1,0 +1,69 @@
+<ion-card>
+  <ion-card-header color="tertiary">
+    <ion-card-title>Rendez-vous</ion-card-title>
+  </ion-card-header>
+  <ion-card-content id="rdvHTML">
+      <ion-img [src]="'../rdv-to-pdf/../../../assets/image/unnamed.png'"></ion-img>
+    <ion-item>
+      <ion-icon name="information-outline" slot="start"></ion-icon>
+      <ion-label>IPP:</ion-label>
+      <ion-col text-center>
+        {{patient.ipp}}
+      </ion-col>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-label>Nom</ion-label>
+      <ion-col text-center >
+        {{patient.nom}}
+      </ion-col>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-label>Prenom</ion-label>
+      <ion-col text-center >
+        {{patient.prenom}}
+      </ion-col>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      <ion-label>Date:</ion-label>
+      <ion-col text-center>
+        {{rdv.dateRendezVous}}
+      </ion-col>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="body-outline" slot="start"></ion-icon>
+      <ion-label>Consultation: </ion-label>
+      <ion-col text-center>
+        {{rdv.consultations.nom}}
+      </ion-col>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="business-outline" slot="start"></ion-icon>
+      <ion-label>Batiment: </ion-label>
+      <ion-col text-center>
+        {{rdv.consultations.service.batiment.label}}{{rdv.consultations.service.numero}}
+      </ion-col>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="trophy-outline" slot="start"></ion-icon>
+      <ion-label>Prix: </ion-label>
+      <ion-col text-center>
+        {{rdv.consultations.prix}}DH
+      </ion-col>
+    </ion-item>
+    <div class="buttons">
+      <ion-row>
+          <ion-button (click)="closeModal()" color="tertiary">Fermer</ion-button>
+          <ion-button (click)="toPdf()"color="tertiary">Telecharger</ion-button>
+      </ion-row>
+    </div>
+  </ion-card-content>
+</ion-card>

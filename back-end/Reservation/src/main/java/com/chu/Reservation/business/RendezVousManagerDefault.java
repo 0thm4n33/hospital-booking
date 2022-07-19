@@ -1,0 +1,315 @@
+package com.chu.Reservation.business;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+import com.chu.Reservation.dao.BatimentDAO;
+import com.chu.Reservation.dao.CompteDAO;
+import com.chu.Reservation.dao.ConsultationDAO;
+import com.chu.Reservation.dao.FileSystemRepository;
+import com.chu.Reservation.dao.HopitalDAO;
+import com.chu.Reservation.dao.PatientDAO;
+import com.chu.Reservation.dao.PreRdvDAO;
+import com.chu.Reservation.dao.RendezVousDAO;
+import com.chu.Reservation.dao.SecretaireDAO;
+import com.chu.Reservation.dao.ServiceDAO;
+import com.chu.Reservation.models.Compte;
+import com.chu.Reservation.models.Consultation;
+import com.chu.Reservation.models.Hopital;
+import com.chu.Reservation.models.Patient;
+import com.chu.Reservation.models.PreRdv;
+import com.chu.Reservation.models.RendezVous;
+import com.chu.Reservation.models.Services;
+
+@Service
+@Transactional
+public class RendezVousManagerDefault implements RendezVousManager {
+	@Autowired
+	HopitalDAO hopitalDAO;
+	@Autowired
+	CompteDAO compteDAO;
+	@Autowired
+	PatientDAO patientDAO;
+	@Autowired
+	SecretaireDAO secretaireDAO;
+	@Autowired
+	ServiceDAO serviceDAO;
+	@Autowired
+	PreRdvDAO preRdvDAO;
+	@Autowired
+	RendezVousDAO rendezVousDAO;
+	@Autowired
+	BatimentDAO batimentDAO;
+	@Autowired
+	ConsultationDAO consultationDAO;
+	@Autowired
+	FileSystemRepository fileSystemRepository;
+	
+	private int ipp;
+	
+	public Patient createAccountPatient(Compte compte,Patient patient) {
+		compte.setPassword(encrypt(compte.getPassword()));
+		compteDAO.save(compte);
+		patientDAO.save(patient);
+		return patient;
+	}
+
+	public List<RendezVous> listeRendezVous(int id) {
+		
+		
+		List<PreRdv> prdvs = patientDAO.findById(id).get().getPreRendezVous();
+		if(prdvs.isEmpty())
+			return null;
+		else {
+			List<RendezVous> rendezVous = new Vector<RendezVous>();
+			for (PreRdv prdv : prdvs) {
+				if(prdv.getRendezVous() != null) 
+					rendezVous.add(prdv.getRendezVous());
+			}
+			return rendezVous;
+		}
+	}
+
+	
+	public List<PreRdv> listePreRdv(int id) {
+		 return patientDAO.findById(id).get().getPreRendezVous();
+		 /*
+		List<PreRdv> prdvs = new ArrayList<PreRdv>();
+		 patientDAO.findById(id).get().getPreRendezVous().forEach(prdv->{
+			if(!prdvs.contains(prdv)) prdvs.add(prdv);
+		});
+		return prdvs;*/
+	}
+	
+	private boolean checkPassword(String password,String truePassword) throws NoSuchAlgorithmException {
+		String md5Hex = DigestUtils.md5DigestAsHex(password.getBytes());
+		return md5Hex.equals(truePassword);
+	}
+	
+	private String encrypt(String password) {
+		return DigestUtils.md5DigestAsHex(password.getBytes());
+	}
+	
+	public Compte chercherCompte(Compte compte) {
+		try {
+			Compte findAccount = compteDAO.findCompte(compte.getLogin());
+			if(findAccount == null) {
+				return null;
+			}
+			else {
+				if(checkPassword(compte.getPassword(), findAccount.getPassword()) || 
+						findAccount.getPassword().equals(compte.getPassword())
+						) {
+					return findAccount;
+				}
+				else {
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	
+	public List<PreRdv> listAllPreRdv() {
+		List<PreRdv> prdvs = preRdvDAO.findAll();
+		/*
+		patientDAO.findAll().forEach(patient->
+			patient.getPreRendezVous().forEach(prdv->{
+				prdvs.add(prdv);
+			})
+		);*/
+		return prdvs;
+	}
+
+	
+	public Patient chercherPatientIPP(Integer ipp) {
+		return patientDAO.findPatientByIPP(ipp);
+	}
+	
+	public List<Hopital> getHopitaux() {
+		return hopitalDAO.findAll();
+	}
+	
+	public List<Services> getServices(int id) {
+		List<Services> services = new ArrayList<Services>();
+		hopitalDAO.findById(id).get().getBatiments().forEach(batiment->{
+			batiment.getServices().forEach(s->{
+				services.add(s);
+			});
+		});
+		return services;
+	}
+
+	public PreRdv effectuerPrdv(PreRdv prdv) {
+		return preRdvDAO.save(prdv);
+	}
+	
+	public String savePhoto(byte[] image,String name) {
+		return fileSystemRepository.save(image,name);
+	}
+
+	public byte[] getImage(int id,String type) {
+		String location = "";
+		if(type.endsWith("ref")) {
+			location = preRdvDAO.findById(id).get().getFicheRefernce();
+		}
+		else if(type.endsWith("pre")) {
+			location = preRdvDAO.findById(id).get().getPrescription();
+		}
+		else if(type.endsWith("cin")) {
+			location = patientDAO.findById(id).get().getCinUploaded();
+		}
+		if(location != "") {
+			System.out.println("Type == "+type);
+			return fileSystemRepository.findInFileSystem(location);
+		}
+		return null;
+	}
+
+	
+	public RendezVous addRdv(RendezVous rendezVous) {
+		rendezVous.getPreRendezVous().setEtat("confirmer");
+		return rendezVousDAO.save(rendezVous);
+	}
+
+	
+	public List<Consultation> getConsultations(int idService) {
+		return serviceDAO.findById(idService).get().getConsultations();
+	}
+
+	
+	public Patient findPatientById(int id) {
+		return patientDAO.findById(id).get();
+	}
+
+	
+	public Patient addIPP(int id, Integer ipp) {
+		System.out.println("id patient "+id);
+		Patient p = patientDAO.findById(id).get();
+		if(p != null) {
+			p.setIpp(ipp);
+			System.out.println("Bien modifier");
+			return p;
+		}
+		return null;
+	}
+
+	public Patient getLastPatient() {
+		return patientDAO.findTopByOrderByIdDesc();
+	}
+	
+	public List<Patient> getAllPatientConfirmed() {
+		List<Patient> patinets = patientDAO.findAll();
+		List<Patient> confirmed = new Vector<Patient>();
+		patinets.forEach(p->{
+			p.getPreRendezVous().forEach(pre->{
+				if(pre.getRendezVous() != null) {
+					if(!confirmed.contains(p)) {
+						confirmed.add(p);
+					}
+				}
+			});
+		});
+		return confirmed;
+	}
+	
+	public List<Services> getServicesHopital(int idService) {
+		int id = serviceDAO.findById(idService).get().getBatiment().getHopital().getId();
+		return getServices(id);
+	}
+
+	@Override
+	public Hopital getHopitalByService(int idService) {
+		return serviceDAO.getById(idService).getBatiment().getHopital();
+	}
+	
+	public boolean isExist(String type,String param) {
+		Patient p = null;
+		Compte c = null;
+		System.out.println("equal --> "+type.equals("cin"));
+		if(type.equals("cin")) {
+			p = patientDAO.findPatientByCin(param);
+		}
+		else if(type.equals("ipp")) {
+			p = patientDAO.findPatientByIPP(Integer.parseInt(param));
+		}
+		else if(type.equals("phone")) {
+			p = patientDAO.findPatientByPhone(param);
+		}
+		else if(type.equals("email")) {
+			c = compteDAO.findCompte(param);
+		}
+		if(p != null || c!= null) return true;
+		return false;
+	}
+
+	public List<RendezVous> getAllRdvs() {
+		return rendezVousDAO.findAll();
+	}
+
+	public Patient getPatientByRdv(int idRdv) {
+		return rendezVousDAO.findById(idRdv).get().getPreRendezVous().getPatient();
+	}
+	
+	public PreRdv supprimerPreRdv(int idPrdv) {
+		PreRdv p = preRdvDAO.findById(idPrdv).get();
+		if(p != null) {
+			p.setEtat("annuler");
+			if(p.getRendezVous() != null) {
+				rendezVousDAO.delete(p.getRendezVous());
+			}
+			return p;
+		}
+		return null;
+	}
+
+	
+	public int getGeneratedIPP() {
+		ipp = 0;
+		List<Patient> patients = getAllPatientConfirmed();
+		patients.forEach(p->{
+			if(p.getIpp()>ipp) {
+				ipp = p.getIpp();
+			}
+		});
+		return ipp+1;
+	}
+
+	public PreRdv validatePreRdv(int idPrdv) {
+		PreRdv p = preRdvDAO.findById(idPrdv).get();
+		if(p != null) {
+			p.setEtat("confirmer");
+			return p;
+		}
+		return null;
+	}
+	
+	public PreRdv setMotifRefus(int idPreRdv,String motif) {
+		PreRdv p = preRdvDAO.findById(idPreRdv).get();
+		if(p == null) return null;
+		else {
+			p.setMotifRefus(motif);
+			return p;
+		}
+	}
+
+	@Override
+	public List<RendezVous> getRdvBetween(LocalDate start, LocalDate end) {
+		return rendezVousDAO.findAllBydateRendezVousBetween(start.atStartOfDay(), end.atStartOfDay());
+	}
+	
+}

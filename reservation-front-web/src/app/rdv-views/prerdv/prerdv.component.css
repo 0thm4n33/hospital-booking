@@ -1,0 +1,59 @@
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.images{
+  display: flex;
+  align-items: center;
+}
+.card-title{
+  font-weight: bold;
+  text-align: center;
+}
+.buttons{
+  margin: 10px;
+  padding: 15px;
+}
+.link{
+  text-align: right;
+}
+a{
+  color: blue;
+}
+.card-footer{
+  display: flex;
+
+}
+.info-patient{
+  margin: 10px;
+  padding-bottom: 30px;
+}
+.confirm-button,.declin-button{
+  margin: 3px;
+}
+.container{
+  margin: 8px;
+}
+#motif{
+  margin-right: 4px;
+}
+.declin-button{
+  display: flex;
+}
+.card-header{
+  background-color: #ffffff;
+  background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+}
+.card-body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#omittedDate{
+  font-weight: bold;
+}
+#date{
+  font-weight: bold;
+  text-align: center;
+}

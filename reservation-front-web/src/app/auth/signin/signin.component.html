@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-lg-5">
+        <img src="../../../assets/images/unnamed.png" class="img-fluid"
+          alt="Sample image" id="logo">
+      </div>
+      <div class="col-lg-8 col-lg-6 col-xl-4 offset-xl-1">
+        <div class="card" style="width: 400px; margin: 30px;">
+          <div class="card-header text-black">
+            <div class="divider d-flex align-items-center my-4">
+              <p class="text-center fw-bold mx-3 mb-0" style="font-weight:bold;">Acceder a votre espace patient</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="signInForm" (ngSubmit)="onSubmitForm()">
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <label for="login" class="fa fa-envelope"></label>
+                <input type="text" class="form-control" placeholder="Entrez votre adresse email" id="login" formControlName="login" >
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-3">
+                  <label for="password" class="fa fa-lock"></label>
+                  <input type="password" class="form-control" placeholder="Entrez votre mot de passe" formControlName="password" id="password">
+              </div>
+              <!-- Error-->
+
+              <div class="text-center text-lg-start mt-4 pt-2">
+                <p class="medium" *ngIf="errorMessage">{{errorMessage}}</p>
+                <button type="submit" class="btn btn-primary btn-lg"
+                  style="padding-left: 2.5rem; padding-right: 2.5rem;" [disabled]="signInForm.invalid">Se connecter</button>
+                <p class="small fw-bold mt-2 pt-1 mb-0">Vous avez pas un compte ?<a href="#!"
+                    class="link-danger" routerLink="../signup"> Inscrivez-vous</a></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

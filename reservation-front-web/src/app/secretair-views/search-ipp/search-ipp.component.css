@@ -1,0 +1,23 @@
+
+select{
+  width: 100px;
+  margin-right: 5px;
+}
+
+label{
+  font-family:Consolas;
+  font-weight: bold;
+  margin: 5px;
+}
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+}
+input[type="search"]{
+  width: 400px;
+}
+button{
+  margin-left: 5px;
+}

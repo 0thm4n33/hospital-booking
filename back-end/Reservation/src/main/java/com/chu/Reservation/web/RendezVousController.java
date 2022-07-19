@@ -1,0 +1,216 @@
+package com.chu.Reservation.web;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.chu.Reservation.business.RendezVousManager;
+import com.chu.Reservation.models.Compte;
+import com.chu.Reservation.models.Consultation;
+import com.chu.Reservation.models.Hopital;
+import com.chu.Reservation.models.Patient;
+import com.chu.Reservation.models.PreRdv;
+import com.chu.Reservation.models.RendezVous;
+import com.chu.Reservation.models.Services;
+import com.chu.Reservation.models.StringResponse;
+
+@RestController
+@CrossOrigin("*")
+public class RendezVousController {
+	@Autowired
+	RendezVousManager manager;
+	
+	@GetMapping("/hopitaux")
+	public List<Hopital> getHospitals(){
+		return manager.getHopitaux();
+	}
+	
+	@GetMapping("/services/{id}")
+	public List<Services> getServicess(@PathVariable(name="id") int id){
+		try {
+			return manager.getServices(id);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"NOT FOUND");
+		}
+	}
+	
+	@PostMapping("/patientSpace/login")
+	public Object login(@RequestBody Compte compte) {
+		return manager.chercherCompte(compte);
+		/*
+		if(manager.chercherCompte(compte.getLogin(), compte.getPassword())==null)
+			return null;
+		else {
+			try{
+				if(manager.chercherCompte(compte.getLogin(), compte.getPassword())!=null) {
+					if(compte.isAdmin()) return compte.getSecretaire();
+					else return compte.getPatient();
+				}
+			}catch(Exception e) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND,"USER NOT FOUND");
+			}
+		}
+		return compte;*/
+	}
+	
+	@PostMapping("/patientSpace/register")
+	public Patient registerPatient(@RequestBody Patient p) {
+		System.out.println(p);
+		return manager.createAccountPatient(p.getCompte(), p);
+	}
+	
+	@PostMapping("/upload")
+	@ResponseBody
+	public StringResponse uploadImage(@RequestParam MultipartFile image) {
+		try {
+			String path =  manager.savePhoto(image.getBytes(), image.getName());
+			return new StringResponse(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new StringResponse("impossible d'uploader l'image "+e.getMessage());
+		}
+	}
+	
+	@PostMapping("/patientSpace/addPreRdv")
+	public PreRdv addPreRdv(@RequestBody PreRdv p) {
+		System.out.println(p);
+		return manager.effectuerPrdv(p);
+	}
+	
+	@GetMapping("patientSpace/prerdv/{id}")
+	public List<PreRdv> getPreRdv(@PathVariable(name = "id")int id){
+		return manager.listePreRdv(id);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "patientSpace/prerdv/download/{id}/{type}",method = RequestMethod.GET,produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] downloadImage(@PathVariable(name="id")int id,@PathVariable(name="type")String type) {
+		return manager.getImage(id,type);
+	}
+	
+	@GetMapping("secretaireSpace/allPreRdv")
+	public List<PreRdv> getAllPreRdvs(){
+		return manager.listAllPreRdv();
+	}
+	@PostMapping("secretaireSpace/addRdv")
+	public RendezVous addRendezVous(@RequestBody RendezVous rdv) {
+		System.out.println(rdv);
+		return manager.addRdv(rdv);
+	}
+	
+	@GetMapping("secretaireSpace/getConsultations/{id}")
+	public List<Consultation> getConsultations(@PathVariable(name="id")int id){
+		return manager.getConsultations(id);
+	}
+	
+	@GetMapping("secretaireSpace/getPatient/{id}")
+	public Patient getPatient(@PathVariable(name="id")int id) {
+		return manager.findPatientById(id);
+	}
+	
+	@PostMapping("secretaireSpace/setIpp/{id}/{ipp}")
+	public Patient setIPP(@PathVariable(name="id") int id,@PathVariable(name="ipp") Integer ipp) {
+		return manager.addIPP(id, ipp);
+	}
+	
+	@GetMapping("secretaireSpace/lastPatient")
+	public Patient getLastPatient() {
+		return manager.getLastPatient();
+	}
+	
+	@GetMapping("secretaireSpace/AllPatient")
+	public List<Patient> getAllPatientConfirmed(){
+		return manager.getAllPatientConfirmed();
+	}
+	
+	@GetMapping("secretaireSpace/findPatient/{ipp}")
+	public Patient findPatient(@PathVariable("ipp")Integer ipp) {
+		try {
+			return manager.chercherPatientIPP(ipp);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"USER NOT FOUND");
+		}
+	}
+	
+	@GetMapping("secretaireSpace/getConsultation/{id}")
+	public List<Consultation> getConsultation(@PathVariable int id){
+		return manager.getConsultations(id);
+	}
+	
+	@GetMapping("secretaireSpace/getServicesInHospitals/{id}")
+	public List<Services> getServicesInHospital(@PathVariable(name="id")int id){
+		return manager.getServicesHopital(id);
+	}
+	
+	@GetMapping("secretaireSpace/getHopital/{id}")
+	public Hopital getHopital(@PathVariable(name="id")int id) {
+		return manager.getHopitalByService(id);
+	}
+	
+	@GetMapping("patientSpace/getRdvs/{id}")
+	public List<RendezVous> getAllRdvs(@PathVariable(name="id")int id){
+		return manager.listeRendezVous(id);
+	}
+	
+	@GetMapping("check/{type}/{param}")
+	public boolean isExist(@PathVariable(name="type")String type,@PathVariable(name = "param")String param) {
+		System.out.println(param);
+		return manager.isExist(type,param);
+	}
+	
+	@GetMapping("secretaireSpace/getAllRdvs")
+	public List<RendezVous>getAllRdvs(){
+		return manager.getAllRdvs();
+	}
+	
+	@GetMapping("secretaireSpace/getPatientByRdv/{id}")
+	public Patient getPatientByRdv(@PathVariable(name = "id")int idRdv) {
+		System.out.println(idRdv);
+		return manager.getPatientByRdv(idRdv);
+	}
+	
+	@GetMapping("secretaireSpace/annulerPrdv/{id}")
+	public PreRdv annulerPreRdv(@PathVariable(name = "id")int idPreRdv) {
+		return manager.supprimerPreRdv(idPreRdv);
+	}
+	
+	@GetMapping("secretaireSpace/getGeneratedIPP")
+	public int getGeneratedIPP() {
+		return manager.getGeneratedIPP();
+	}
+	
+	@GetMapping("secretaireSpace/validateRdv/{id}")
+	public PreRdv validateRdv(@PathVariable(name = "id")int idPreRdv) {
+		return manager.validatePreRdv(idPreRdv);
+	}
+	
+	@GetMapping("secretaireSpace/setMotif/{id}/{motif}")
+	public PreRdv setMotif(@PathVariable(name = "id")int idPreRdv,@PathVariable(name = "motif")String motif) {
+		return manager.setMotifRefus(idPreRdv, motif);
+	}
+	
+	@GetMapping("secretaireSpace/getRdvBetween")
+	public List<RendezVous> getRdvsBetween(@RequestParam String start,@RequestParam String end) throws ParseException{
+		LocalDate d1 = LocalDate.parse(start);
+		LocalDate d2 = LocalDate.parse(end);
+		return manager.getRdvBetween(d1, d2);
+	}
+}

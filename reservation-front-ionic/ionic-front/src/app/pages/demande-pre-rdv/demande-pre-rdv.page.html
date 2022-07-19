@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start" color="light">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="font-weight: bold; font-size: large;">Demander un rendez-vous</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <form [formGroup]="prerdvForm" (ngSubmit)="onSubmitForm()">
+      <ion-item>
+        <ion-label position="floating">Hopital</ion-label>
+        <ion-select interface="popover" formControlName="hopital" (ngModelChange)="onSelected($event)">
+          <ion-select-option *ngFor="let hopital of hopitaux" [value]="hopital.id">
+            {{hopital.nom}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Service</ion-label>
+        <ion-select interface="popover" formControlName="service" (ngModelChange)="onSelectedService($event)">
+          <ion-select-option *ngFor="let service of services" [value]="service">
+            {{service.name}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed" id="fileLabel">Fiche de prescription</ion-label>
+        <ion-input type="file" formControlName="prescription" (change)="onUploadPrescription($event)"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed" id="fileLabel">Fiche de reference</ion-label>
+        <ion-input type="file" formControlName="reference" (change)="onUploadReference($event)"></ion-input>
+      </ion-item>
+      <ion-row>
+        <ion-col>
+          <ion-button color="tertiary" type="submit" expand="block" [disabled]="prerdvForm.invalid">
+            VALIDER
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-card>
+
+</ion-content>

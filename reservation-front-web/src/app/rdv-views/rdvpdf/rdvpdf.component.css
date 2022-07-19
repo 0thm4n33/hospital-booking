@@ -1,0 +1,35 @@
+button{
+  margin: 10px;
+}
+.modal-content{
+  width: 600px;
+}
+.card-title{
+  margin-bottom: 50px;
+  font-weight: bold;
+  display: flex;
+}
+
+.card-body{
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 15px;
+}
+
+.titre{
+  margin-left: 10px;
+  text-align: left;
+}
+
+.logo{
+  text-align: right;
+}
+
+.info{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+

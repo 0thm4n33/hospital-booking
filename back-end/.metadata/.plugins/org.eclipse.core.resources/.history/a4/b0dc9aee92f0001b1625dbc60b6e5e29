@@ -1,0 +1,77 @@
+package com.chu.Reservation.models;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Vector;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name="secretaire")
+public class Secretaire implements Serializable {
+	@Transient
+	private static final long serialVersionUID = 1L;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@Column(unique = true)
+	private String login;
+	private String password;
+	@OneToMany(mappedBy = "secretaire")
+	private List<PreRdv> preRendezVous = new Vector<PreRdv>();
+	
+	public Secretaire() {
+	}
+	
+	public Secretaire(int id, String login, String password) {
+		this();
+		this.id = id;
+		this.login = login;
+		this.password = password;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "Secretaire [id=" + id + ", login=" + login + ", password=" + password + "]";
+	}
+
+	public List<PreRdv> getPreRendezVous() {
+		return preRendezVous;
+	}
+
+	public void setPreRendezVous(List<PreRdv> preRendezVous) {
+		this.preRendezVous = preRendezVous;
+	}
+	
+	
+}

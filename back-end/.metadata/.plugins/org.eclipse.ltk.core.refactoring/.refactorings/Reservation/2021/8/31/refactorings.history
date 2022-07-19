@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;com.chu.Reservation.models.Patient.ville&apos; in &apos;com.chu.Reservation.models.Patient&apos;&#x0D;&#x0A;- Original project: &apos;Reservation&apos;&#x0D;&#x0A;- Original element: &apos;com.chu.Reservation.models.Patient.ville&apos;&#x0D;&#x0A;- Getter method name: &apos;getVille&apos;&#x0D;&#x0A;- Setter method name: &apos;setVille&apos;&#x0D;&#x0A;- Field visibility: &apos;public&apos;&#x0D;&#x0A;- Use getter and setter methods in declaring type" comments="false" declaring="true" description="Encapsulate field &apos;ville&apos;" flags="589830" getter="getVille" id="org.eclipse.jdt.ui.self.encapsulate" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.chu.Reservation.models{Patient.java[Patient^ville" insertion="23" setter="setVille" stamp="1628157326025" version="1.0" visibility="1"/>
+</session>

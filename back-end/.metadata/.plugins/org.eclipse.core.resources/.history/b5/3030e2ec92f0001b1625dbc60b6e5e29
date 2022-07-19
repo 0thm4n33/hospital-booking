@@ -1,0 +1,5 @@
+package com.chu.Reservation.models;
+
+public class PreRdv {
+
+}

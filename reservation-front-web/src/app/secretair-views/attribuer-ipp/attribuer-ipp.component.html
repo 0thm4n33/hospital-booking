@@ -1,0 +1,20 @@
+<form [formGroup]="ippForm" (ngSubmit)="onSubmit()">
+<div class="modal-header">
+  <h4 class="modal-title">Attirbution d'un ipp</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+      <label for="ipp">Entrez un ipp valide pour ce patient </label>
+      <input type="text" class="form-control" name="ipp" id="ipp" formControlName="ipp">
+      <button type="button" class="btn btn-dark" style="margin-top: 10px;" (click)="onIPPClick()"
+      >Generer un IPP automatique</button>
+    </div>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-outline-primary" >Attribuer</button>
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Fermer</button>
+</div>
+</form>

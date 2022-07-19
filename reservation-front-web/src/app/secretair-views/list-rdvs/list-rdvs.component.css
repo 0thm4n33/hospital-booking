@@ -1,0 +1,49 @@
+th,td{
+  text-align: center;
+}
+.card-title{
+  font-weight: bold;
+}
+
+.card-title{
+  width: 500px;
+  height: 500px;
+}
+.card{
+  background-color: #ffffff;
+  background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+  margin-top: 10px;
+  box-shadow: 0 0 10px 0 rgba(100, 100, 100, 0.26);
+  width: 70rem;
+}
+.card-header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+input[type=date] {
+  text-align: right;
+  padding-right: 3px;
+}
+
+input[type="date"]:before {
+  color: black;
+  content: attr(placeholder) !important;
+  margin-right: 0.5em;
+}
+input[type="date"]:before {
+  color: black;
+  content: attr(placeholder) !important;
+  margin-right: 0.5em;
+}
+input[type="date"]:focus:before {
+  content: '' !important;
+}
+button{
+  margin-left: 5px;
+}

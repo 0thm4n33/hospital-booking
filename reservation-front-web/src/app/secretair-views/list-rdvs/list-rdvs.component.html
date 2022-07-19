@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header">
+    <app-filter [filters]="serviceFilter" (selected)="selectedService($event)"></app-filter>
+    <div class="col">
+        <input type="date" class="form-control" placeholder="From date" [(ngModel)]="dateDebut" >
+        <input type="date" class="form-control" placeholder="To date" [(ngModel)]="dateFin">
+        <button class="btn btn-info" (click)="onSearch()">Chercher</button>
+        <button class="btn btn-info" (click)="onR()">Renitialiser</button>
+    </div>
+  </div>
+  <div class="card-body" *ngIf="resultFilter.length > 0">
+    <ul class="list-group">
+      <li *ngFor="let rdv of resultFilter" class="list-group-item">
+        <div *ngIf="rdv.patient">
+          <table class="table table-bordered">
+              <thead class="thead">
+                <tr>
+                  <th scope="col" class="w-15">IPP</th>
+                  <th scope="col" class="w-20">Nom et prenom</th>
+                  <th scope="col" class="w-30">Consultation</th>
+                  <th scope="col" class="w-15">Date</th>
+                  <th scope="col" class="w-15">Batiment</th>
+                  <th scope="col" class="w-15">Prix</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <td>{{rdv.patient.ipp}}</td>
+                  <td>{{rdv.patient.nom}} {{rdv.patient.prenom}}</td>
+                  <td>{{rdv.consultations.nom}}</td>
+                  <td>{{rdv.dateRendezVous}}</td>
+                  <td>{{rdv.consultations.service.batiment.label}}{{rdv.consultations.service.numero}}</td>
+                  <td>{{rdv.consultations.prix}}DH</td>
+              </tbody>
+          </table>
+          </div>
+      </li>
+    </ul>
+  </div>
+</div>

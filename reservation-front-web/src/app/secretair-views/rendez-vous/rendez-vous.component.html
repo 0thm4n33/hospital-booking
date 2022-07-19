@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Confirmation</h2>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="formRdv" (ngSubmit)="onSubmit()" *ngIf="showThis">
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="hopital">Hopital</label>
+          <select (ngModelChange)="onSelected($event)"
+          name="hopital" id="hopital" class="form-control" formControlName="hopital">
+            <option *ngFor="let hopital of hopitals" [selected]="hopital === hopitalSelected"
+             [ngValue]="hopital.id">{{hopital.nom}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-12">
+          <label for="service">Services</label>
+          <select name="service" id="service" class="form-control" formControlName="specialte"
+          (ngModelChange)="onSelectedService($event)"
+          >
+            <option *ngFor="let service of specialtes" [selected]="service === serviceSelected"
+            [ngValue]="service">{{service.name}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-12">
+          <div *ngFor="let c of consultations">
+            <label for="consultation">Consultation</label>
+            <select name="consultation" id="consultation" class="form-control" formControlName="consultation">
+              <option *ngFor="let c of consultations" [ngValue]="c">{{c.nom}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-md-12">
+          <label for="dateRdv">Date du rendez vous</label>
+          <input type="datetime-local" name="bday" max="2022-08-18T16:30" min={{currentDate}} class="form-control" formControlName="dateRdv">
+        </div>
+        <button class="btn btn-success" type="submit" [disabled]="formRdv.invalid">Valider</button>
+      </div>
+    </form>
+  </div>
+</div>
+

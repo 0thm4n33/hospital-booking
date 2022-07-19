@@ -1,0 +1,27 @@
+<ion-content style="height: 55%;">
+      <ion-card style="height: 80%; text-align: center;">
+        <ion-card-header style="padding-bottom: 10px;">
+          <ion-card-title style="text-align: center;">
+           <ion-img [src]="'../rdv-to-pdf/../../../assets/image/unnamed.png'"></ion-img>
+         </ion-card-title>
+       </ion-card-header>
+       <ion-card-content style="margin: 20px; text-align: center;">
+           <ion-row style="display: block; text-align: center; margin: 20px;color: black;">
+              <ion-col>
+                Application qui vous permettera de gerer vos rendez-vous en toute simplicité.
+              </ion-col>
+              <ion-col>
+                Veuillez vous connectez ou creez votre compte pour gerer vos rendez-vous.
+              </ion-col>
+            </ion-row>
+                <ion-button expand="block" size="default" (click)="signIn()" color="tertiary">
+                  <ion-icon name="log-in-outline" size="large" class="icon"></ion-icon>
+                  <h3>Se connecter</h3>
+                </ion-button>
+                <ion-button expand="block"  size="default" (click)="addAccount()" color="tertiary">
+                  <ion-icon name="person-add-outline" size="large" class="icon"></ion-icon>
+                    <h3>Creez votre compte patient</h3>
+                </ion-button>
+         </ion-card-content>
+      </ion-card>
+</ion-content>

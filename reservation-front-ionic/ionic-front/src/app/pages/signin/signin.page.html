@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title style="text-align: center; font-weight: bold; font-family: Consolas;">
+      Connectez-vous
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-img [src]="'../../../assets/image/unnamed.png'"></ion-img>
+    </ion-card-header>
+    <form [formGroup]="signInForm">
+      <ion-list class="bg-transparent">
+        <ion-item lines="full" color="none">
+          <ion-label position="floating">Email</ion-label>
+         <ion-input type="text" formControlName="login" ></ion-input>
+        </ion-item>
+        <ion-item lines="full" color="none">
+          <ion-label position="floating">Mot de passe</ion-label>
+         <ion-input type="password" formControlName="password" ></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-row style="margin: 10px;">
+        <ion-col>
+          <ion-button color="tertiary" type="submit" expand="block" (click)="signIn()" [disabled]="signInForm.invalid">SE CONNECTER</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="error">
+        <ion-col>
+          <h5 style="color: red;">{{error}}</h5>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-card>
+</ion-content>

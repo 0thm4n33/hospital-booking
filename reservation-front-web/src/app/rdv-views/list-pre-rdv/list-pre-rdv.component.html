@@ -1,0 +1,13 @@
+<div class="card" *ngIf="show">
+  <div class="card-header text-center">
+    <h2 class="card-title">Pre-rendez vous demandes</h2>
+  </div>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" *ngFor="let preRdv of preRdvs | paginate: { itemsPerPage: 2, currentPage: p }">
+        <app-prerdv [prerdv]="preRdv" [disableDecline]="true" [isPatient]="true"></app-prerdv>
+      </li>
+    </ul>
+    <pagination-controls class="text-center" (pageChange)="p = $event" (pageChange)="scrollUp()"></pagination-controls>
+  </div>
+</div>

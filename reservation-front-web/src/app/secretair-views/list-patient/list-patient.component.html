@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header text-center">
+    <h2 class="card-title">Liste des patients confirmés</h2>
+    <app-search-ipp *ngIf="patients" (change)="patientChange($event)" [confirmed]="patients"></app-search-ipp>
+  </div>
+    <div class="card-body" *ngIf="showPatients">
+      <ul class="list-group" *ngIf="!p">
+        <li class="list-group-item" *ngFor="let p of patients">
+          <app-single-patient  [patient]="p" [isSingle]="false"></app-single-patient>
+        </li>
+      </ul>
+  <app-single-patient *ngIf="p" [patient]="p"></app-single-patient>
+</div>
+  <div class="card-body" *ngIf="!showPatients" style="text-align: center;">
+    <h4>Aucun patient n'est confirme pour le moment</h4>
+  </div>
+</div>

@@ -1,0 +1,229 @@
+package com.chu.Reservation.business;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.chu.Reservation.dao.BatimentDAO;
+import com.chu.Reservation.dao.CompteDAO;
+import com.chu.Reservation.dao.ConsultationDAO;
+import com.chu.Reservation.dao.FileSystemRepository;
+import com.chu.Reservation.dao.HopitalDAO;
+import com.chu.Reservation.dao.PatientDAO;
+import com.chu.Reservation.dao.PreRdvDAO;
+import com.chu.Reservation.dao.RendezVousDAO;
+import com.chu.Reservation.dao.SecretaireDAO;
+import com.chu.Reservation.dao.ServiceDAO;
+import com.chu.Reservation.models.Compte;
+import com.chu.Reservation.models.Consultation;
+import com.chu.Reservation.models.Hopital;
+import com.chu.Reservation.models.Patient;
+import com.chu.Reservation.models.PreRdv;
+import com.chu.Reservation.models.RendezVous;
+import com.chu.Reservation.models.Services;
+
+@Service
+@Transactional
+public class RendezVousManagerDefault implements RendezVousManager {
+	@Autowired
+	HopitalDAO hopitalDAO;
+	@Autowired
+	CompteDAO compteDAO;
+	@Autowired
+	PatientDAO patientDAO;
+	@Autowired
+	SecretaireDAO secretaireDAO;
+	@Autowired
+	ServiceDAO serviceDAO;
+	@Autowired
+	PreRdvDAO preRdvDAO;
+	@Autowired
+	RendezVousDAO rendezVousDAO;
+	@Autowired
+	BatimentDAO batimentDAO;
+	@Autowired
+	ConsultationDAO consultationDAO;
+	@Autowired
+	FileSystemRepository fileSystemRepository;
+	
+	public Patient createAccountPatient(Compte compte,Patient patient) {
+		compteDAO.save(compte);
+		patientDAO.save(patient);
+		return patient;
+	}
+
+	public List<RendezVous> listeRendezVous(int id) {
+		
+		
+		List<PreRdv> prdvs = patientDAO.findById(id).get().getPreRendezVous();
+		if(prdvs.isEmpty())
+			return null;
+		else {
+			List<RendezVous> rendezVous = new Vector<RendezVous>();
+			for (PreRdv prdv : prdvs) {
+				if(prdv.getRendezVous() != null) 
+					rendezVous.add(prdv.getRendezVous());
+			}
+			return rendezVous;
+		}
+	}
+
+	
+	public List<PreRdv> listePreRdv(int id) {
+		 return patientDAO.findById(id).get().getPreRendezVous();
+		 /*
+		List<PreRdv> prdvs = new ArrayList<PreRdv>();
+		 patientDAO.findById(id).get().getPreRendezVous().forEach(prdv->{
+			if(!prdvs.contains(prdv)) prdvs.add(prdv);
+		});
+		return prdvs;*/
+	}
+
+	
+	public Compte chercherCompte(Compte compte) {
+		try {
+			Compte findAccount = compteDAO.findCompte(compte.getLogin());
+			if(findAccount == null) {
+				return null;
+			}
+			else {
+				if(findAccount.getPassword().equals(compte.getPassword())) {
+					return findAccount;
+				}
+				else {
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	
+	public List<PreRdv> listAllPreRdv() {
+		List<PreRdv> prdvs = new ArrayList<PreRdv>();
+		patientDAO.findAll().forEach(patient->
+			patient.getPreRendezVous().forEach(prdv->{
+				prdvs.add(prdv);
+			})
+		);
+		return prdvs;
+	}
+
+	
+	public Patient chercherPatientIPP(Integer ipp) {
+		return patientDAO.findPatientByIPP(ipp);
+	}
+	
+	public List<Hopital> getHopitaux() {
+		return hopitalDAO.findAll();
+	}
+	
+	public List<Services> getServices(int id) {
+		List<Services> services = new ArrayList<Services>();
+		hopitalDAO.findById(id).get().getBatiments().forEach(batiment->{
+			batiment.getServices().forEach(s->{
+				services.add(s);
+			});
+		});
+		return services;
+	}
+
+	public PreRdv effectuerPrdv(PreRdv prdv) {
+		return preRdvDAO.save(prdv);
+	}
+	
+	public String savePhoto(byte[] image,String name) {
+		return fileSystemRepository.save(image,name);
+	}
+
+	public byte[] getImage(int id,String type) {
+		String location = "";
+		if(type.endsWith("ref")) {
+			location = preRdvDAO.findById(id).get().getFicheRefernce();
+		}
+		else if(type.endsWith("pre")) {
+			location = preRdvDAO.findById(id).get().getPrescription();
+		}
+		else if(type.endsWith("cin")) {
+			location = patientDAO.findById(id).get().getCinUploaded();
+		}
+		if(location != "") {
+			System.out.println("Type == "+type);
+			return fileSystemRepository.findInFileSystem(location);
+		}
+		return null;
+	}
+
+	
+	public RendezVous addRdv(RendezVous rendezVous) {
+		return rendezVousDAO.save(rendezVous);
+	}
+
+	
+	public List<Consultation> getConsultations(int idService) {
+		return serviceDAO.findById(idService).get().getConsultations();
+	}
+
+	
+	public Patient findPatientById(int id) {
+		return patientDAO.findById(id).get();
+	}
+
+	
+	public Patient addIPP(int id, Integer ipp) {
+		Patient p = patientDAO.findById(id).get();
+		if(p != null) {
+			if(p.getIpp() == null) {
+				p.setIpp(ipp);
+				System.out.println("Bien modifier");
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public Patient getLastPatient() {
+		return patientDAO.findTopByOrderByIdDesc();
+	}
+	
+	public List<Patient> getAllPatientConfirmed() {
+		return patientDAO.getPatientConfirmed();
+	}
+	
+	public List<Services> getServicesHopital(int idService) {
+		int id = serviceDAO.findById(idService).get().getBatiment().getHopital().getId();
+		return getServices(id);
+	}
+
+	@Override
+	public Hopital getHopitalByService(int idService) {
+		return serviceDAO.getById(idService).getBatiment().getHopital();
+	}
+	
+	public boolean isExist(String type,String param) {
+		Patient p = null;
+		Compte c = null;
+		System.out.println("equal --> "+type.equals("cin"));
+		if(type.equals("cin")) {
+			p = patientDAO.findPatientByCin(param);
+		}
+		else if(type.equals("ipp")) {
+			p = patientDAO.findPatientByIPP(param);
+		}
+		else if(type.equals("phone")) {
+			p = patientDAO.findPatientByPhone(param);
+		}
+		else if(type.equals("email")) {
+			c = compteDAO.findCompte(param);
+		}
+		if(p != null || c!= null) return true;
+		return false;
+	}
+}

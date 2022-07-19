@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col">
+    <div class="input-group">
+      <div class="container">
+        <label for="option">Rechercher par</label>
+        <select name="option" id="option" class="form-control" [(ngModel)]="selectedOption">
+        <option *ngFor="let o of options" [ngValue]="o">{{o}}</option>
+        </select>
+        <input type="search" class="form-control rounded" placeholder="Valeur a chercher ..." aria-label="Search"
+      aria-describedby="search-addon" [(ngModel)]="valeur"/>
+      <button type="button" class="btn btn-outline-primary" (click)="onSearch()">chercher</button>
+      </div>
+    </div>
+  </div>
+</div>

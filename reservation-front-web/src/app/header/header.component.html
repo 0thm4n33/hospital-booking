@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="../../assets/images/unnamed.png" alt="chu" width="60" height="30" class="d-inline-block align-top">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav" *ngFor="let link of links">
+        <li routerLinkActive="active" class="nav-item">
+          <a *ngIf="link.key === 'signin;else another'" class="nav-link" id="logout">{{link.value}}</a>
+          <a #another [routerLink]="link.key" class="nav-link">{{link.value}}</a>
+        </li>
+      </ul>
+    </div>
+  </nav>

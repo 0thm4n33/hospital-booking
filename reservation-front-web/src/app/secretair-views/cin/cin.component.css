@@ -1,0 +1,17 @@
+
+.container  {
+  display: flex;
+  align-items:center;
+  justify-items: center;
+}
+
+img{
+  transition: transform .5s ease;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+img:hover{
+  transform: scale(1.5);
+}

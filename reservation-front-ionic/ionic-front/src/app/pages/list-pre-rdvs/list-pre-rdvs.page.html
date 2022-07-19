@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="font-family: Consolas; text-align: center; font-weight: bold;">Vos rendez-vous</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card *ngFor="let prerdv of preRdvs;">
+    <div *ngIf="prerdv.etat === 'annuler'">
+      <ion-card-header color="danger">
+        <h5 style="font-weight: bold; text-align: center;">Demande d'un rendez-vous dans le service: {{prerdv.service.name}}</h5>
+        <h5 style="font-weight: bold; text-align: center;">Faite le: {{prerdv.createdAt | date}}</h5>
+      </ion-card-header>
+    </div>
+    <div *ngIf="prerdv.etat === 'confirmer'">
+      <ion-card-header color="success">
+        <h5 style="font-weight: bold; text-align: center;">Demande d'un rendez-vous dans le service: {{prerdv.service.name}}</h5>
+        <h5 style="font-weight: bold; text-align: center;">Faite le: {{prerdv.createdAt | date}}</h5>
+      </ion-card-header>
+    </div>
+    <div *ngIf="prerdv.etat === 'encours'">
+      <ion-card-header color="dark">
+        <h5 style="font-weight: bold; text-align: center;">Demande d'un rendez-vous dans le service: {{prerdv.service.name}}</h5>
+        <h5 style="font-weight: bold; text-align: center;">Faite le: {{prerdv.createdAt | date}}</h5>
+      </ion-card-header>
+    </div>
+    <ion-card-content>
+      <div class="status" style="text-align: end ; padding: 0px; border: 0px;">
+        <ion-badge *ngIf="prerdv.etat === 'encours'" color="dark" slot="end">
+          En attente
+        </ion-badge>
+        <ion-badge *ngIf="prerdv.etat === 'confirmer'" color="success" slot="end">
+          Confirmer
+        </ion-badge>
+        <ion-badge *ngIf="prerdv.etat === 'annuler'" color="danger" slot="end">
+          Annuler
+        </ion-badge>
+      </div>
+      <ion-slides [options]="sliderConfig">
+        <ion-slide>
+          <div class="slide">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title style="font-weight: bold;">
+                  Fiche de Reference
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-img [src]="prerdv.imagePrescription"></ion-img>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ion-slide>
+        <ion-slide>
+          <div class="slide">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title style="font-weight: bold;">
+                  Fiche de Prescription
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-img [src]="prerdv.imageReference"></ion-img>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ion-slide>
+      </ion-slides>
+        <div class="button" style="text-align: end;">
+          <ion-button color="success" *ngIf="prerdv.rendezVous !== null" slot="end" style="text-align: end;" (click)="open(prerdv.rendezVous,prerdv.patient)">
+            Consulter
+          </ion-button>
+        </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

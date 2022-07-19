@@ -1,0 +1,24 @@
+.modal-title{
+  font-weight: bold;
+}
+.modal-header{
+  background-color: #ffffff;
+  background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+  text-align: center;
+}
+h4{
+  text-align: center;
+}
+.containre{
+ text-align: center;
+}
+img{
+  transition: transform .5s ease;
+  height: 450px;
+  text-align: center;
+  padding-left: 45px;
+}
+img:hover{
+  transform: scale(1.5);
+}
+

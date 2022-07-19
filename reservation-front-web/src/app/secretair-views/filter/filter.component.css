@@ -1,0 +1,19 @@
+
+.row{
+  width: 450px;
+  padding: 10px;
+}
+.col{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+label{
+  margin: 15px;
+  padding-left: 10px;
+  font-family: Consolas;
+  font-weight: bold;
+}
+option{
+  font-family: Consolas;
+}

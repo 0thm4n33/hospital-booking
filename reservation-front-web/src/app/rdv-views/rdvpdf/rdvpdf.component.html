@@ -1,0 +1,47 @@
+<div class="modal-content" *ngIf="rdv && patient">
+  <div class="modal-header">
+    <h5 class="modal-title">Rendez vous CHU HASSAN II</h5>
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <div class="card" id="htmlData">
+      <div class="card-title">
+        <div class="titre">
+          <div>ROYAUME DU MAROC</div>
+          <div>MINISTRE DE LA SANTE</div>
+           <div>CENTRE HOSPITALIER HASSAN II</div>
+        </div>
+          <div class="logo">
+            <img src="'../../../../../assets/images/unnamed.png" alt="chu" style="max-width: 40%;">
+          </div>
+      </div>
+      <div class="card-body" *ngIf="rdv && patient">
+        <div class="container">
+          <div class="title">Identifiant Permanent du patient:
+            <span class="info">{{patient.ipp}}</span>
+          </div>
+          <div >Nom et prenom du patient:
+            <span class="info">{{patient.nom}} {{patient.prenom}}</span>
+          </div>
+          <div id="rdv">Rendez vous:
+            <span class="info">{{getDateRendezVous()}}</span>
+          </div>
+          <div id="batiment">Batiment:
+            <span class="info">{{rdv.consultations.service.batiment.label}}{{rdv.consultations.service.numero}}</span>
+          </div>
+          <div id="consultation">Consultation:
+            <span class="info">{{rdv.consultations.nom}}</span>
+          </div>
+          <div id="tarif">Tarif:
+            <span class="info">{{rdv.consultations.prix}}DH</span>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+    <div class="modal-footer">
+      <button class="btn btn-info" (click)="toPDF()">Telecharger</button>
+    </div>
+</div>

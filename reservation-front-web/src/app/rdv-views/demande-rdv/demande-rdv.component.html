@@ -1,0 +1,41 @@
+<div class="card">
+  <div class="card-header text-center">
+    <h2 class="card-title">Remplissez votre demande</h2>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="prerdvForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-8">
+          <label for="hopital">Hopital</label>
+          <select (ngModelChange)="onSelected($event)"
+          name="hopital" id="hopital" class="form-control" formControlName="hopital">
+            <option *ngFor="let hopital of hospitals" [ngValue]="hopital.id">{{hopital.nom}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-8">
+          <label for="service">Services</label>
+          <select name="service" id="service" class="form-control" formControlName="service"
+          (ngModelChange)="onSelectedService($event)"
+          >
+            <option *ngFor="let service of servicess" [ngValue]="service">{{service.name}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-8">
+            <div class="custom-file">
+              <label for="reference" class="custom-file-label" id="labelRef">Selectionner la fiche de refernce</label>
+              <input type="file" name="" id="reference" class="custom-file-input" formControlName="reference" (change)="onUploadReference($event)">
+            </div>
+        </div>
+        <div class="form-group col-md-8">
+          <div class="custom-file">
+            <label class="custom-file-label" for="prescription" id="labelPre" >Selectionner la fiche de prescription</label>
+            <input type="file"class="custom-file-input" name="prescription" id="prescription" formControlName="prescription" (change)="onUploadPrescription($event)">
+          </div>
+        </div>
+          <div class="form-group col-md-8">
+            <button class="btn btn-primary" type="submit" [disabled]="prerdvForm.invalid">Valider</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

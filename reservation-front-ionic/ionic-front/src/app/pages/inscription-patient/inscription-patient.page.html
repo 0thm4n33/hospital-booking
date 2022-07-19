@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title style="font-family:Consolas; font-size: x-large;font-weight: bold; text-align: center;
+    padding: 5px;
+    ">
+    Inscrivez-vous
+  </ion-title>
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="home"></ion-back-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <form [formGroup]="inscriptionForm" (ngSubmit)="onSubmitForm()">
+      <ion-item lines="full">
+        <ion-label position="floating">IPP</ion-label>
+       <ion-input type="text" formControlName="ipp" (focusout)="onFocusOutCin('ipp')" (focusin)="clear('ipp')"></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label position="floating">CIN <span class="required">*</span>
+
+        </ion-label>
+       <ion-input type="text" formControlName="cin" (focusout)="onFocusOutCin('cin')" (focusin)="clear('cin')"></ion-input>
+       <ion-text *ngIf="errorCin !== ''" color="danger">{{errorCin}}</ion-text>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Nom <span class="required">*</span> </ion-label>
+       <ion-input type="text" formControlName="nom"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Prenom <span class="required">*</span> </ion-label>
+       <ion-input type="text" formControlName="prenom"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">
+         <ion-icon name="mail-outline"></ion-icon>
+          Email <span class="required">*</span>
+         </ion-label>
+       <ion-input type="email" formControlName="email" (focusout)="onFocusOutCin('email')" (focusin)="clear('email')"></ion-input>
+       <ion-text *ngIf="errorEmail !== ''" color="danger">{{errorEmail}}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Ville <span class="required">*</span> </ion-label>
+             <ion-select interface="popover" formControlName="ville">
+               <ion-select-option *ngFor="let ville of villes" [value]="ville">
+                   {{ville}}
+               </ion-select-option>
+             </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Adresse <span class="required">*</span> </ion-label>
+            <ion-input type="text" formControlName="adresse"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Telephone <span class="required">*</span> </ion-label>
+            <ion-input type="tel" formControlName="numeroTelephone" (focusout)="onFocusOutCin('phone')" (focusin)="clear('phone')"></ion-input>
+            <ion-text *ngIf="errorTelephone !== ''" color="danger">{{errorTelephone}}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Mot de passe <span class="required">*</span> </ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Retapez le mot de passe <span class="required">*</span> </ion-label>
+        <ion-input type="password" formControlName="passwordConfirm"></ion-input>
+      </ion-item>
+      <ion-label position="fixed" id="fileLabel">Selectionner votre cin <span class="required">*</span> </ion-label>
+      <ion-item>
+        <ion-input type="file" formControlName="cinUploaded" (change)="onUploadCin($event)"></ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" expand="block" [disabled]="inscriptionForm.invalid || !clean()">S'inscrire</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" expand="block" color="light" (click)="goBack()">Retour</ion-button>
+        </ion-col>
+      </ion-row>
+
+   </form>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            Service : {{getService()}}
+            <span class="badge badge-secondary" *ngIf="status === 'encours' ">En cours de traitement</span>
+            <span class="badge badge-success" *ngIf="status === 'confirmer' ">Confirmer</span>
+            <span class="badge badge-danger" *ngIf="status === 'annuler'">Annuler</span>
+          </div>
+       </div>
+        <div class="card-body">
+          <li class="list-group-item">
+            <div class="date" *ngIf="prerdv.createdAt">
+              <p style="font-weight: bold; text-align: center; padding: 8px; border: 1px solid black;">
+                Date de la demande : {{prerdv.createdAt | date}}
+              </p>
+            </div>
+            <div class="info-patient" *ngIf="patient">
+              <app-single-patient [patient]="patient"></app-single-patient>
+            </div>
+            <div class="images">
+              <h4 *ngIf="imageReferenceIsLoading">Fiche de reference:
+                <div class="d-flex justify-content-center">
+                  <div class="w-25">
+                    <img  [src]="imageReference"  class="img-fluid" alt="prescription" (click)="onClickImg('ref')">
+                  </div>
+              </div>
+            </h4>
+            <h4 *ngIf="imagePrescriptionIsLoading"> Fiche de prescription:
+              <div class="d-flex justify-content-center">
+                <div class="w-25">
+                  <img  [src]="imagePrescription"  class="img-fluid" alt="prescription" (click)="onClickImg('pre')">
+                </div>
+              </div>
+            </h4>
+          </div>
+        </li>
+            <div class="motif" *ngIf="status === 'annuler' ">
+              <p class="text-font-bold" style="color: red;">
+                Le motif de refus : {{prerdv.motifRefus}}
+              </p>
+            </div>
+        </div>
+        <div class="card-footer">
+          <div *ngIf="showConsultButton">
+            <button class="btn btn-success" (click)="onShowRdv()">Consulter</button>
+          </div>
+          <div *ngIf="showButton" class="confirm-button">
+            <button *ngIf="!refresh" class="btn btn-success" (click)="onConfirmPresse()">Confirmer</button>
+          </div>
+          <div class="declin-button" *ngIf="!disableDecline">
+            <input *ngIf="!refresh" type="text" name="motif" id="motif" placeholder="Entrez un motif de refus" class="form-control">
+            <button *ngIf="!refresh" class="btn btn-danger" (click)="onDelete()">Annuler</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

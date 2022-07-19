@@ -1,0 +1,8 @@
+<div class="row" *ngIf="filters">
+  <div class="col">
+    <label for="value">{{filters.key}}</label>
+    <select name="filter" id="value" class="form-control" [(ngModel)]="filter" (change)="onSelected()">
+      <option *ngFor="let f of filters.values" [ngValue]="f">{{f}}</option>
+    </select>
+  </div>
+</div>

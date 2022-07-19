@@ -1,0 +1,117 @@
+package com.chu.Reservation.models;
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "patient")
+public class Patient implements Serializable {
+	@Transient
+	private static final long serialVersionUID = 1L;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String ipp;
+	private String cin;
+	private String nom;
+	private String prenom;
+	private String numeroTelephone;
+	private String email;
+	private String adresse;
+	
+	public Patient() {
+		
+	}
+	
+	public Patient(String ipp, String cin, String nom, String prenom, String numeroTelephone, String email,
+			String adresse) {
+		this(cin,nom,prenom,numeroTelephone,email,adresse);
+		this.ipp = ipp;
+	}
+
+	public Patient(String cin, String nom, String prenom, String numeroTelephone, String email, String adresse) {
+		this.cin = cin;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.numeroTelephone = numeroTelephone;
+		this.email = email;
+		this.adresse = adresse;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getIpp() {
+		return ipp;
+	}
+
+	public void setIpp(String ipp) {
+		this.ipp = ipp;
+	}
+
+	public String getCin() {
+		return cin;
+	}
+
+	public void setCin(String cin) {
+		this.cin = cin;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getPrenom() {
+		return prenom;
+	}
+
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+
+	public String getNumeroTelephone() {
+		return numeroTelephone;
+	}
+
+	public void setNumeroTelephone(String numeroTelephone) {
+		this.numeroTelephone = numeroTelephone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+
+	@Override
+	public String toString() {
+		return "Patient [ipp=" + ipp + ", cin=" + cin + ", nom=" + nom + ", prenom=" + prenom + ", numeroTelephone="
+				+ numeroTelephone + ", email=" + email + ", adresse=" + adresse + "]";
+	}
+	
+	
+}

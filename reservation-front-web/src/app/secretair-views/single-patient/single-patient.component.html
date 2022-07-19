@@ -1,0 +1,39 @@
+<div class="card" *ngIf="patient">
+  <div class="card-header text-center">
+    <div class="card-title">
+      {{patient.nom}} {{patient.prenom}}
+      <span *ngIf="verified" class="badge badge-primary">IPP verifie</span>
+      <span *ngIf="!verified" class="badge badge-danger">IPP non verifie</span>
+    </div>
+  </div>
+  <div class="card-body">
+     <div class="table">
+       <thead class="thead">
+         <tr>
+           <th scope="col">IPP</th>
+           <th scope="col" >CIN</th>
+           <th scope="col" >Nom</th>
+           <th scope="col" >Prenom</th>
+           <th scope="col" >Telephone</th>
+           <th scope="col" >Ville</th>
+           <th scope="col">Adresse</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+           <td>{{patient.ipp}}</td>
+           <td>{{patient.cin}}</td>
+           <td>{{patient.nom}}</td>
+           <td>{{patient.prenom}}</td>
+           <td>{{patient.numeroTelephone}}</td>
+           <td>{{patient.ville}}</td>
+           <td>{{patient.adresse}}</td>
+         </tr>
+       </tbody>
+     </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-primary" id="cin" (click)="showCin()">Consulter la cin du patient</button>
+    <button *ngIf="!verified" class="btn btn-warning" id="ipp"   (click)="open()">Attribuer un ipp</button>
+  </div>
+</div>

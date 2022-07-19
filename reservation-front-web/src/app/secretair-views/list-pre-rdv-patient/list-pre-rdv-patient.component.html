@@ -1,0 +1,14 @@
+  <div class="card">
+    <div class="card-header">
+      <app-filter [filters]="etatFilter" (selected)="printSelectedValue($event)" [defaultOption]="'encours'"></app-filter>
+      <app-filter [filters]="serviceFilter" (selected)="serviceSelected($event)" [defaultOption]="'TOUS LES SERVICES'"></app-filter>
+    </div>
+    <div class="card-body" *ngIf="prerdvs.length > 0">
+      <ul class="list-group">
+        <app-prerdv *ngFor="let prRdv of prerdvs | paginate: { itemsPerPage: 2, currentPage: p }" [prerdv]="prRdv" [patient]="prRdv.patient" [showButton]="true"></app-prerdv>
+        <pagination-controls class="text-center" (pageChange)="p = $event" (pageChange)="upPage()"></pagination-controls>
+      </ul>
+    </div>
+  </div>
+
+

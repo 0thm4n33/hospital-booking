@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-body">
+    <ul class="list-group">
+      <li *ngFor="let rdv of rendezVous" class="list-group-item">
+        <div *ngIf="rdv.patient">
+          <table class="table table-bordered">
+              <thead class="thead">
+                <tr>
+                  <th scope="col" class="w-20">IPP</th>
+                  <th scope="col" class="w-20">Nom et prenom</th>
+                  <th scope="col" class="w-20">Consultation</th>
+                  <th scope="col" class="w-20">Date</th>
+                  <th scope="col" class="w-15">Batiment</th>
+                  <th scope="col" class="w-15">Prix</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <td>{{rdv.patient.ipp}}</td>
+                  <td>{{rdv.patient.nom}} {{rdv.patient.prenom}}</td>
+                  <td>{{rdv.consultations.nom}}</td>
+                  <td>{{rdv.dateRendezVous}}</td>
+                  <td>{{rdv.consultations.service.batiment.label}}{{rdv.consultations.service.numero}}</td>
+                  <td>{{rdv.consultations.prix}}DH</td>
+              </tbody>
+          </table>
+          </div>
+          <div class="buttons" *ngIf="!rdvSecraitaire">
+            <button class="btn btn-info" (click)="toPDF(rdv)">Consulter</button>
+          </div>
+      </li>
+    </ul>
+  </div>
+</div>
